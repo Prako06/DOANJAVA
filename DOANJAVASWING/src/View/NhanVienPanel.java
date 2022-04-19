@@ -3,10 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package View;
-import DAO.LoadDAO;
 import java.sql.*;
 import DAO.MyConnect;
 import java.util.List;
+import java.util.Vector;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.NhanVien;
 /**
@@ -17,14 +18,55 @@ public class NhanVienPanel extends javax.swing.JPanel {
     /**
      * Creates new form NhanVienPanel
      */
-    public NhanVienPanel() {
-        initComponents();
-        LoadDAO ld = new LoadDAO();
-        List<NhanVien> listN = ld.getAllNhanViens();
-        DefaultTableModel model = (DefaultTableModel) jtable.getModel();
-        for (NhanVien o : listN) {
-            model.addRow(new Object[]{o.getMaNV(),o.getTenNV(),o.getSDT(),o.getEmail(),o.getNgaySinh(),o.getGioiTinh(),o.getDiaChi()});
+    Connection conn = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+    int q, i;
+    
+    public void GetDataTable() throws SQLException{       
+        try {
+            conn = MyConnect.getConnection();
+            ps = conn.prepareStatement("SELECT * FROM chbqa.nhanvien");
+            rs = ps.executeQuery();
+        
+            ResultSetMetaData stData = rs.getMetaData();
+        
+            q = stData.getColumnCount();
+        
+            DefaultTableModel RecordTable = (DefaultTableModel)jtable.getModel();
+            RecordTable.setRowCount(0);
+               
+            while (rs.next()){
+            Vector columnData = new Vector();
+            for(i=1;i<=q;i++){
+                columnData.add(rs.getString("MaNV"));
+                columnData.add(rs.getString("TenNV"));
+                columnData.add(rs.getString("SDT"));
+                columnData.add(rs.getString("Email"));
+                columnData.add(rs.getString("NgaySinh"));
+                columnData.add(rs.getInt("GioiTinh")== 1 ? "Nam":"Nữ");
+                columnData.add(rs.getString("DiaChi"));
+            }
+            RecordTable.addRow(columnData);
         }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+    
+      public void ResetData(){
+         jTextField5.setText("");
+         jTextField2.setText("");
+         jTextField1.setText("");
+         jTextField3.setText("");
+         jFormattedTextField1.setText("");
+         jTextField6.setText("");
+         jTextField4.setText("");
+    }
+    
+    public NhanVienPanel() throws SQLException {
+        initComponents();
+        GetDataTable();
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -55,6 +97,7 @@ public class NhanVienPanel extends javax.swing.JPanel {
         jFormattedTextField1 = new javax.swing.JFormattedTextField();
         jLabel7 = new javax.swing.JLabel();
         jTextField5 = new javax.swing.JTextField();
+        jTextField6 = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -124,8 +167,8 @@ public class NhanVienPanel extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel7)
-                .addGap(17, 17, 17)
-                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(98, 98, 98)
+                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -138,11 +181,12 @@ public class NhanVienPanel extends javax.swing.JPanel {
                             .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jRadioButton1)
-                                .addGap(59, 59, 59)
-                                .addComponent(jRadioButton2))
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(61, 61, 61)
+                                .addComponent(jRadioButton2))))
+                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
@@ -153,7 +197,7 @@ public class NhanVienPanel extends javax.swing.JPanel {
                     .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
                     .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
                     .addComponent(jFormattedTextField1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(280, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -175,18 +219,31 @@ public class NhanVienPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2)
                     .addComponent(jLabel6)
-                    .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(105, Short.MAX_VALUE))
+                    .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jRadioButton1)
+                    .addComponent(jRadioButton2))
+                .addGap(51, 51, 51))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jButton1.setText("Delete");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("New");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Save");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -243,12 +300,82 @@ public class NhanVienPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jtableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtableMouseClicked
-
+       DefaultTableModel RecordTable = (DefaultTableModel)jtable.getModel();
+       int SelectedRows = jtable.getSelectedRow();
+       
+       jTextField5.setText(RecordTable.getValueAt(SelectedRows, 0).toString());
+       jTextField2.setText(RecordTable.getValueAt(SelectedRows, 1).toString());
+       jTextField1.setText(RecordTable.getValueAt(SelectedRows, 2).toString());
+       jTextField3.setText(RecordTable.getValueAt(SelectedRows, 3).toString());
+       jFormattedTextField1.setText(RecordTable.getValueAt(SelectedRows, 4).toString());
+       jTextField6.setText(RecordTable.getValueAt(SelectedRows, 5).toString());
+       jTextField4.setText(RecordTable.getValueAt(SelectedRows, 6).toString());
     }//GEN-LAST:event_jtableMouseClicked
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       
+       try{
+            conn = MyConnect.getConnection();
+            ps = conn.prepareStatement("UPDATE chbqa.nhanvien SET TenNV=?, SDT=?, Email=?, NgaySinh=?, GioiTinh=?, DiaChi=? WHERE (MaNV = ?)");
+            
+            ps.setString(7, jTextField5.getText());
+            ps.setString(1, jTextField2.getText());
+            ps.setString(2, jTextField1.getText());
+            ps.setString(3, jTextField3.getText());
+            ps.setString(4, jFormattedTextField1.getText());
+            ps.setString(5, jTextField6.getText());
+            ps.setString(6, jTextField4.getText());          
+            
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Đã hoàn thành việc cập nhật mới");
+            GetDataTable();
+            ResetData();
+        }
+        catch (SQLException e){
+            JOptionPane.showMessageDialog(null, e);
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        try{
+            conn = MyConnect.getConnection();
+            ps = conn.prepareStatement("INSERT INTO chbqa.nhanvien(MaNV,TenNV,SDT,Email,NgaySinh,GioiTinh,DiaChi) VALUES (?,?,?,?,?,?,?)");
+            
+            ps.setString(1, jTextField5.getText());
+            ps.setString(2, jTextField2.getText());
+            ps.setString(3, jTextField1.getText());
+            ps.setString(4, jTextField3.getText());
+            ps.setString(5, jFormattedTextField1.getText());
+            ps.setString(6, jTextField6.getText());
+            ps.setString(7, jTextField4.getText());
+            
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Đã hoàn thành việc thêm mới");
+            GetDataTable();
+            ResetData();
+        }
+        catch (SQLException e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        try{
+            conn = MyConnect.getConnection();
+            ps = conn.prepareStatement("DELETE  FROM chbqa.nhanvien WHERE MaNV=?");
+            
+            ps.setString(1, jTextField5.getText());           
+            
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Đã hoàn thành việc Xóa bỏ");
+            GetDataTable();
+            ResetData();
+        }
+        catch (SQLException e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -275,6 +402,7 @@ public class NhanVienPanel extends javax.swing.JPanel {
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
+    private javax.swing.JTextField jTextField6;
     private javax.swing.JTable jtable;
     // End of variables declaration//GEN-END:variables
 }

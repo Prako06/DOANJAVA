@@ -69,8 +69,9 @@ public class NhanVien {
         this.Email = Email;
     }
 
-    public Date getNgaySinh() {
-        return NgaySinh;
+    public String getNgaySinh() {
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+        return df.format(NgaySinh);
     }
 
     public void setNgaySinh(Date NgaySinh) {

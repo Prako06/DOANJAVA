@@ -10,7 +10,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -64,31 +67,35 @@ public class ChuyenManHinhController {
         
         @Override
         public void mouseClicked(MouseEvent e) {      
-            switch(kind){
-                case "KhachHang":
-                    node = new KhachHangJPanel();
-                    break;
-                case "ThongKe":
-                    node = new ThongKeJPanel();
-                    break;
-                case "HangHoa":
-                    node = new HangHoaJPanel();
-                    break;
-                case "NhanVien":
-                    node = new NhanVienPanel();
-                    break;
-                case "BanHang":
-                    node = new BanHangJPanel();
-                    break;
-                default:
-                    break;
+            try {
+                switch(kind){
+                    case "KhachHang":
+                        node = new KhachHangJPanel();
+                        break;
+                    case "ThongKe":
+                        node = new ThongKeJPanel();
+                        break;
+                    case "HangHoa":
+                        node = new HangHoaJPanel();
+                        break;
+                    case "NhanVien":
+                        node = new NhanVienPanel();
+                        break;
+                    case "BanHang":
+                        node = new BanHangJPanel();
+                        break;
+                    default:
+                        break;
+                }
+                root.removeAll();
+                root.setLayout(new BorderLayout());
+                root.add(node);
+                root.validate();
+                root.repaint();
+                setChangeBackground(kind);
+            } catch (SQLException ex) {
+                Logger.getLogger(ChuyenManHinhController.class.getName()).log(Level.SEVERE, null, ex);
             }
-            root.removeAll();
-            root.setLayout(new BorderLayout());
-            root.add(node);
-            root.validate();
-            root.repaint();
-            setChangeBackground(kind);
         }
 
         @Override
