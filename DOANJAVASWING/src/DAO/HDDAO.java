@@ -16,11 +16,19 @@ import java.time.LocalDate;
 import java.text.SimpleDateFormat;  
 import java.util.Date; 
 import model.CTHD;
+import java.sql.*;
+import DAO.MyConnect;
 /**
  *
  * @author nhipr
  */
-public class HDDAO extends MyConnect{
+public class HDDAO{
+    private Connection conn;
+
+    public HDDAO() {
+        conn = MyConnect.getConnection();
+    }
+    
  public int createhd(HoaDon hd)   
  {
      String SQL = "INSERT INTO `chbqa`.`hoadon` (`MaHD`, `NgayLap`, `TongTien`, `MaNV`, `MaKH`) VALUES (?, ?, ?, ?, ?)";

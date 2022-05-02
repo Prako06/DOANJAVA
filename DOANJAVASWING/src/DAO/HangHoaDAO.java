@@ -10,12 +10,20 @@ import model.HangHoa;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
+import DAO.MyConnect;
+import java.sql.*;
 /**
  *
  * @author nhipr
  */
-public class HangHoaDAO extends MyConnect {
+public class HangHoaDAO  {
 
+    private Connection conn;
+
+    public HangHoaDAO() {
+        conn = MyConnect.getConnection();
+    }
+    
     public ArrayList<HangHoa> DSHH() {
         ArrayList<HangHoa> dshh = new ArrayList<HangHoa>();
         try {

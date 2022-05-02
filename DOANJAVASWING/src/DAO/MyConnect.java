@@ -14,17 +14,32 @@ import java.util.logging.Logger;
 public class MyConnect {
         public Connection conn = null;
 
-    public MyConnect() {
-        try {           
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/chbqa", "root", "nhitu1den6");
-            System.out.println("Ket noi thanh cong");
-        } catch (SQLException e) {
-            System.out.println("Ket noi that bai");
-            e.printStackTrace();
+    public static Connection getConnection(){
+
+        String url = "jdbc:mysql://localhost:3306/chbqa";
+        String user = "root";
+        String password = "nhitu1den6";
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            return DriverManager.getConnection(url, user, password);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MyConnect.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(MyConnect.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+
+    public static void main(String[] args) {
+        Connection conn = getConnection();
+        if(conn != null){
+            System.out.println("Kết nối thành công");
+        }else{
+            System.out.println("Kết nối thất bại");
         }
     }
     
-    public static void main(String[] args) {
-        MyConnect a = new MyConnect();
-    }
+    
 }
