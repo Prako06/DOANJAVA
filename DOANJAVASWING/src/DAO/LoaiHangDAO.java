@@ -7,16 +7,24 @@ package DAO;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-
+import java.sql.*;
+import DAO.MyConnect;
 import model.LoaiHang;
 
 /**
  *
  * @author nhipr
  */
-public class LoaiHangDAO extends MyConnect{
+public class LoaiHangDAO {
+    private Connection conn;
+    public LoaiHangDAO()
+    {
+        conn = MyConnect.getConnection();
+    }
     public ArrayList<LoaiHang> getLoaiHangs()
     {
+        
+        
         ArrayList<LoaiHang> llh = new ArrayList<LoaiHang>();
         
         try {
