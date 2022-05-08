@@ -31,7 +31,7 @@ public class ChuyenManHinhController {
         this.root = jpnRoot;
     }
     
-    public void setView(JPanel jpnItem, JLabel jlbItem){
+    public void setView(JPanel jpnItem, JLabel jlbItem) throws SQLException{
         kindSelected = "KhachHang";
         jpnItem.setBackground(new Color(0,40,255));
         jlbItem.setBackground(new Color(0,40,255));
