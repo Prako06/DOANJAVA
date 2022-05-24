@@ -272,7 +272,8 @@ public class KhachHangJPanel extends javax.swing.JPanel {
 
     private void tbKhachHangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbKhachHangMouseClicked
         DefaultTableModel RecordTable = (DefaultTableModel)tbKhachHang.getModel();
-       int SelectedRows = tbKhachHang.getSelectedRow();   
+       int SelectedRows = tbKhachHang.getSelectedRow(); 
+       
        txtMa.setText(RecordTable.getValueAt(SelectedRows, 0).toString());
        txtName.setText(RecordTable.getValueAt(SelectedRows, 1).toString());
        txtSdt.setText(RecordTable.getValueAt(SelectedRows, 2).toString());

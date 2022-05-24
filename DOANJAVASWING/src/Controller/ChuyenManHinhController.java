@@ -3,6 +3,7 @@ package Controller;
 import Bean.DanhMucBean;
 import View.BanHangJPanel;
 import View.HangHoaJPanel;
+import View.HoaDonJPanel;
 import View.KhachHangJPanel;
 import View.NhanVienPanel;
 import View.ThongKeJPanel;
@@ -16,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import model.HoaDon;
 
 /**
  *
@@ -83,6 +85,9 @@ public class ChuyenManHinhController {
                         break;
                     case "BanHang":
                         node = new BanHangJPanel();
+                        break;
+                    case "HoaDon":
+                        node = new HoaDonJPanel();
                         break;
                     default:
                         break;
