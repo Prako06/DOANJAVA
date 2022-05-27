@@ -137,7 +137,7 @@ public class HoaDonJPanel extends javax.swing.JPanel {
     String Ma;
     private void tbHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbHoaDonMouseClicked
         int SelectedRows = tbHoaDon.getSelectedRow(); 
-        Ma = tbHoaDon.getModel().getValueAt(0,SelectedRows).toString();
+        Ma = tbHoaDon.getModel().getValueAt(SelectedRows,0).toString();
         
         try {
             conn = MyConnect.getConnection();
