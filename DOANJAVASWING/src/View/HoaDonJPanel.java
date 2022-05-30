@@ -4,15 +4,18 @@
  */
 package View;
 
+import DAO.HangHoaDAO;
 import DAO.MyConnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import model.HangHoa;
 
 /**
  *
@@ -92,7 +95,6 @@ public class HoaDonJPanel extends javax.swing.JPanel {
         ));
         tbHoaDon.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         tbHoaDon.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        tbHoaDon.setPreferredSize(new java.awt.Dimension(375, 80));
         tbHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tbHoaDonMouseClicked(evt);
@@ -108,7 +110,7 @@ public class HoaDonJPanel extends javax.swing.JPanel {
                 {null, null, null, null}
             },
             new String [] {
-                "MaHD", "SoLuong", "DonGia", "MaHang"
+                "TenHang", "MaHang", "SoLuong", "DonGia"
             }
         ));
         jScrollPane2.setViewportView(tbCTHD);
@@ -137,6 +139,7 @@ public class HoaDonJPanel extends javax.swing.JPanel {
     String Ma;
     private void tbHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbHoaDonMouseClicked
         int SelectedRows = tbHoaDon.getSelectedRow(); 
+        HangHoaDAO hhdao = new HangHoaDAO();
         Ma = tbHoaDon.getModel().getValueAt(SelectedRows,0).toString();
         
         try {
@@ -153,16 +156,32 @@ public class HoaDonJPanel extends javax.swing.JPanel {
                
             while (rs.next()){
             Vector columnData = new Vector();
-            for(i=1;i<=q;i++){
-                columnData.add(rs.getInt("MaHD"));
-                columnData.add(rs.getString("DonGia"));
-                columnData.add(rs.getInt("SoLuong"));
+            for(i=1;i<=q;i++){       
+                
+          
+                int ma = rs.getInt("MaHang");
+                HangHoa hh = hhdao.getHH(ma);
+                columnData.add(hh.getTenHang());
+                
                 columnData.add(rs.getString("MaHang"));
+                /*String ma = tbHoaDon.getModel().getValueAt(SelectedRows,0).toString();
+                String sql = "SELECT DISTINCT TenHang FROM chbqa.hanghoa INNER JOIN chbqa.cthd ON hanghoa.MaHang = cthd.MaHang WHERE cthd.MaHang ='"+ ma +"' ";
+                Statement stm = conn.createStatement();
+                ResultSet rsn = stm.executeQuery(sql);
+                while(rs.next())
+                {
+                    columnData.add(rsn.getString(1));
+                }*/
+                
+                columnData.add(rs.getString("SoLuong"));
+                columnData.add(rs.getInt("DonGia"));
+                
+                
             }
             RecordTable.addRow(columnData);
         }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
+            e.printStackTrace();
         }
     }//GEN-LAST:event_tbHoaDonMouseClicked
 
